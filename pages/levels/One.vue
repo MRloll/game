@@ -3,12 +3,14 @@
   img(src="~/assets/images/level-two.svg")
   run-bar
   aside-steps
+  .win(v-show="numOfVisibles == 0 ") راءع لقد كسبت
+  .loose(v-show="numOfVisibles == 'loose' ") lost
   .char
     img(src="~/assets/images/jenan.svg" @click="moves")
   .points-wrapper
+    img(src="~/assets/images/point.svg" class="point" ref="p")
     img(src="~/assets/images/point.svg" class="point")
-    img(src="~/assets/images/point.svg" class="point")
-    img(src="~/assets/images/point.svg" class="point higher" ref="condiOne")
+    img(src="~/assets/images/point.svg" class="point higher" )
     img(src="~/assets/images/point.svg" class="point higher")
     img(src="~/assets/images/point.svg" class="point higher jump-down")
     img(src="~/assets/images/point.svg" class="point")
@@ -25,10 +27,20 @@ export default {
   data() {
     return {
       actions: [],
-      visiblePoints: [28],
+      visiblePoints: [],
+      numOfVisibles: 8,
     }
   },
   computed: {},
+  mounted() {
+    const points = document.querySelectorAll('.points-wrapper img')
+    for (const point of points) {
+      this.visiblePoints.push({
+        left: point.offsetLeft,
+        bottom: point.offsetBottom,
+      })
+    }
+  },
   created() {
     this.$nuxt.$on('actions', (payload) => {
       this.actions = payload
@@ -36,6 +48,9 @@ export default {
     })
   },
   methods: {
+    // ------------------
+    // ======  steps to win
+    // --------------
     moves() {
       if (
         (this.actions[0] === '2step-forward' &&
@@ -44,9 +59,11 @@ export default {
           this.actions[1] !== 'step-forward') ||
         this.actions[0] === 'jump-up'
       ) {
-        this.twoStepsForward()
-        console.log('loose')
-        return ''
+        if (this.actions[0] === 'step-forward') {
+          this.stepForward()
+        } else if (this.actions[0] === '2step-forward') {
+          this.twoStepsForward()
+        }
       } else {
         for (const action of this.actions) {
           if (action === 'step-forward') {
@@ -61,20 +78,20 @@ export default {
         }
       }
     },
+    // ------------------
+    // ======  animation
+    // --------------
     stepForward() {
       tl.to('.char', {
         duration: 1,
-        left:
-          '+=' + document.querySelectorAll('.points-wrapper img')[0].offsetLeft,
+        left: '+=' + this.visiblePoints[0].left,
         onComplete: () => this.hidePoints(),
       })
     },
     twoStepsForward() {
       tl.to('.char', {
         duration: 1,
-        left:
-          '+=' +
-          document.querySelectorAll('.points-wrapper img')[0].offsetLeft * 2,
+        left: '+=' + this.visiblePoints[1].left,
         onComplete: () => this.hidePoints(),
       })
     },
@@ -82,26 +99,41 @@ export default {
       tl.to('.char', {
         duration: 1,
         bottom: '+=' + '58px',
-        left: '+=' + '40px',
+        left: '+=' + '20px',
         onComplete: () => this.hidePoints(),
       })
     },
+
+    // ------------------
+    // ======  how to hide points
+    // --------------
     hidePoints() {
       const points = document.querySelectorAll('.points-wrapper img')
       const char = document.querySelector('.char').getBoundingClientRect()
       for (let point = 0; point < points.length; point++) {
         if (points[point].getBoundingClientRect().left <= char.left + 20) {
           if (points[point].classList.contains('jump-down')) {
-            tl.pause()
             gsap.to('.char', { bottom: 100, duration: 1 })
-            tl.play()
           }
           points[point].classList.add('hide')
-        } else {
-          this.visiblePoints = points[point].offsetLeft
-          console.log(points[point].offsetLeft)
         }
       }
+      let a = 0
+      for (let point = 0; point < points.length; point++) {
+        if (getComputedStyle(points[point]).visibility === 'visible') {
+          a++
+          this.numOfVisibles = a
+        } else {
+          this.numOfVisibles = 0
+        }
+      }
+      tl.to('.char', {
+        onComplete: () => {
+          if (this.numOfVisibles !== 0) {
+            this.numOfVisibles = 'loose'
+          }
+        },
+      })
     },
   },
 }
@@ -116,6 +148,15 @@ export default {
     height: 115px;
   }
 }
+.win,
+.loose {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #aba0a0;
+  z-index: 1;
+}
+
 .points-wrapper {
   position: absolute;
   left: 0px;
