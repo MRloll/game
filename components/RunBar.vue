@@ -9,6 +9,8 @@ div.run-bar
 </template>
 
 <script>
+import { gsap } from 'gsap'
+const tl = gsap.timeline()
 export default {
   data() {
     return {
@@ -37,7 +39,16 @@ export default {
       picker.removeChild(picker.lastChild)
     },
     sendActions() {
-      this.$nuxt.$emit('actions', this.actions)
+      if (this.actions.length > 0) {
+        tl.to('.aside-wrapper', {
+          x: '-100%',
+          duration: 0.3,
+        })
+        tl.to('.char', {
+          visibility: 'visible',
+          onComplete: () => this.$nuxt.$emit('actions', this.actions),
+        })
+      }
     },
   },
 }

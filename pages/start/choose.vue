@@ -1,17 +1,47 @@
 <template lang="pug">
 .container
   img(src="~/assets/images/start-two.svg")
-  .char-wrapper
-    nuxt-link(to="/levels/one")
-      img(src="~/assets/images/char-jenan.svg")
-    nuxt-link(to="/levels/one")
-      img(src="~/assets/images/char-sky-guard.svg")
-    nuxt-link(to="/levels/one")
-      img(src="~/assets/images/char-wingy.svg")
-    nuxt-link(to="/levels/one")
-      img(src="~/assets/images/char-light.svg")
+  .char-wrapper()
+    nuxt-link(to="/levels/one" v-for="char in characters" :key="char.name")
+      img(:src="char.src" :alt="char.name" @click="setCharacter(char)")
 
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      characters: [
+        {
+          src: require('~/assets/images/char-jenan.svg'),
+          name: 'jenan',
+          char: require('~/assets/images/jenan.svg'),
+        },
+        {
+          src: require('~/assets/images/char-sky-guard.svg'),
+          name: 'sky-guard',
+          char: require('~/assets/images/sky-guard.svg'),
+        },
+        {
+          src: require('~/assets/images/char-wingy.svg'),
+          name: 'wingy',
+          char: require('~/assets/images/wingy.svg'),
+        },
+        {
+          src: require('~/assets/images/char-light.svg'),
+          name: 'light',
+          char: require('~/assets/images/light.svg'),
+        },
+      ],
+    }
+  },
+  methods: {
+    setCharacter(char) {
+      this.$store.dispatch('setCharacter', char)
+    },
+  },
+}
+</script>
 
 <style scoped lang="scss">
 .char-wrapper {

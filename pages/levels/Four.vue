@@ -1,0 +1,304 @@
+<template lang="pug">
+.container
+  img(src="~/assets/images/level-four.svg")
+  run-bar
+  aside-steps
+  .win(v-show="numOfVisibles == 0 ") راءع لقد كسبت
+  .loose(v-show="numOfVisibles == 'loose' ") lost
+  .char
+    img(:src="character.char" :alt="character.name")
+  .points-wrapper
+    img(src="~/assets/images/point.svg" class="point")
+    img(src="~/assets/images/point.svg" class="point")
+    img(src="~/assets/images/point.svg" class="point higher")
+    img(src="~/assets/images/point.svg" class="point higher jump-down" )
+    img(src="~/assets/images/point.svg" class="point higher")
+    img(src="~/assets/images/point.svg" class="point higher")
+    img(src="~/assets/images/point.svg" class="point more-high ")
+
+</template>
+
+<script>
+import { gsap } from 'gsap'
+const tl = gsap.timeline()
+
+export default {
+  data() {
+    return {
+      actions: [],
+      numOfVisibles: 7,
+      points: [],
+      patternOne: [
+        'step-forward',
+        'step-forward',
+        'jump-up',
+        'step-forward',
+        'step-forward',
+        'step-forward',
+        'jump-up',
+        'jump-up',
+        'step-forward',
+      ],
+      compareOne: 0,
+      compareTwo: 0,
+      compareThree: 0,
+      compareFour: 0,
+      compareFive: 0,
+      compareSix: 0,
+    }
+  },
+  computed: {
+    character() {
+      return this.$store.getters.character
+    },
+  },
+  mounted() {
+    const points = document.querySelectorAll('.points-wrapper img')
+    for (let i = 0; i < points.length; i++) {
+      this.points.push(points[i].offsetLeft)
+    }
+  },
+  created() {
+    this.$nuxt.$on('actions', (payload) => {
+      this.actions = payload
+      this.moves()
+    })
+  },
+  methods: {
+    // ------------------
+    // ======  steps to win
+    // ------------------
+    moves() {
+      // for (let i = 0; i < this.actions.length; i++) {
+      //   if (this.actions[i] === this.patternOne[i]) this.compareOne++
+      //   if (this.actions[i] === this.patternTwo[i]) this.compareTwo++
+      //   if (this.actions[i] === this.patternThree[i]) this.compareThree++
+      //   if (this.actions[i] === this.patternFour[i]) this.compareFour++
+      //   if (this.actions[i] === this.patternFive[i]) this.compareFive++
+      //   if (this.actions[i] === this.patternSix[i]) this.compareSix++
+      // }
+
+      // const compares = [
+      //   { value: this.compareOne, pattern: 'patternOne' },
+      //   { value: this.compareTwo, pattern: 'patternTwo' },
+      //   { value: this.compareThree, pattern: 'patternThree' },
+      //   { value: this.compareFour, pattern: 'patternFour' },
+      //   { value: this.compareFive, pattern: 'patternFive' },
+      //   { value: this.compareSix, pattern: 'patternSix' },
+      // ]
+
+      // let i = 0
+      // let superiority = {}
+      // for (const f of compares) {
+      //   if (f.value > i) {
+      //     i = f.value
+      //     superiority = { value: f.value, pattern: f.pattern }
+      //   }
+      // }
+
+      for (let i = 0; i < this.actions.length; i++) {
+        // if (this.actions[i] === this[superiority.pattern][i])
+        this.validate(this.actions[i])
+      }
+      // console.log(superiority)
+      // console.log(this[superiority.pattern])
+    },
+    validate(action) {
+      if (action === '2step-forward') {
+        this.twoStepsForward()
+      } else if (action === 'step-forward') {
+        this.stepForward()
+      } else if (action === 'jump-up') {
+        this.jumpUp()
+      } else if (action === '2jump-up') {
+        this.twoJumpUp()
+      }
+    },
+
+    // ------------------
+    // ======  animation
+    // --------------
+    stepForward() {
+      tl.to('.char', {
+        duration: 1,
+        left: () => {
+          return '+=' + (this.points[1] - this.points[0])
+        },
+        onComplete: () => this.hidePoints(),
+      })
+    },
+    twoStepsForward() {
+      tl.to('.char', {
+        duration: 1,
+        left: () => {
+          return '+=' + (this.points[2] - this.points[0])
+        },
+        onComplete: () => this.hidePoints(),
+      })
+    },
+    jumpUp() {
+      tl.to('.char', {
+        duration: 1,
+        bottom: '+=' + '58px',
+        left: () => {
+          return '+=' + (this.points[1] - this.points[0])
+        },
+        onComplete: () => this.hidePoints(),
+      })
+    },
+    twoJumpUp() {
+      tl.to('.char', {
+        duration: 1,
+        bottom: () => {
+          if (this.numOfVisibles !== 1) {
+            return '+=' + '90px'
+          } else {
+            gsap.to('.char', {
+              bottom: '+=' + '50px',
+            })
+            gsap.to('.char', {
+              duration: 1,
+              left: '+=' + (this.points[1] - this.points[0] + 40),
+            })
+
+            tl.to(
+              '.char',
+              {
+                top: '+=' + '50px',
+              },
+              '<.4'
+            )
+          }
+        },
+        left: () => {
+          if (this.numOfVisibles !== 1)
+            return '+=' + (this.points[1] - this.points[0])
+        },
+        onComplete: () => this.hidePoints(),
+      })
+    },
+
+    // ------------------
+    // ======  how to hide points
+    // --------------
+    hidePoints() {
+      const points = document.querySelectorAll('.points-wrapper img')
+      const char = document.querySelector('.char').getBoundingClientRect()
+      for (let point = 0; point < points.length; point++) {
+        if (
+          points[point].getBoundingClientRect().left <= char.right &&
+          char.bottom < points[point].getBoundingClientRect().bottom + 100
+        ) {
+          const jumpdown = document.querySelector(
+            '.points-wrapper img.jump-down'
+          )
+
+          if (
+            points[point].classList.contains('jump-down') &&
+            getComputedStyle(jumpdown).visibility !== 'hidden'
+          ) {
+            document.querySelector('.char').classList.add('down')
+          }
+          points[point].classList.add('hide')
+        }
+      }
+      let a = 0
+      for (let point = 0; point < points.length; point++) {
+        if (getComputedStyle(points[point]).visibility === 'visible') {
+          a++
+          this.numOfVisibles = a
+        } else {
+          this.numOfVisibles = 0
+        }
+      }
+
+      if (this.points.length > 4) {
+        const newPoints = this.points.filter((pos) => {
+          return pos > document.querySelector('.char').offsetLeft
+        })
+
+        this.points = newPoints
+      }
+
+      // tl.to('.char', {
+      //   onComplete: () => {
+      //     if (this.numOfVisibles !== 0) {
+      //       this.numOfVisibles = 'loose'
+      //     }
+      //   },
+      // })
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.char {
+  position: absolute;
+  bottom: 100px;
+  left: 2px;
+  img {
+    height: 115px;
+  }
+  &.down {
+    transition: transform 1s ease;
+    transform: translate(5px, 45px);
+  }
+}
+.win,
+.loose {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #aba0a0;
+  z-index: 1;
+}
+
+.points-wrapper {
+  position: absolute;
+  left: 0px;
+  padding-left: 93px;
+  width: 95%;
+  bottom: 100px;
+  display: flex;
+  justify-content: space-around;
+  img {
+    position: relative;
+  }
+  img:nth-child(1) {
+    left: -14px;
+  }
+  img:nth-child(2) {
+    left: -31px;
+  }
+  img:nth-child(3) {
+    left: -49px;
+  }
+  img:nth-child(4) {
+    top: -126px;
+    left: -66px;
+  }
+  img:nth-child(5) {
+    left: -78px;
+  }
+  img:nth-child(6) {
+    left: -108px;
+    top: -167px;
+  }
+  img:nth-child(7) {
+    left: -44px;
+    top: -167px;
+  }
+  .higher {
+    position: relative;
+    top: -74px;
+  }
+  .more-high {
+    position: relative;
+    top: -130px;
+  }
+  img.hide {
+    visibility: hidden;
+  }
+}
+</style>

@@ -26,6 +26,10 @@ export default {
   position: relative;
   /* overflow: clip; */
 }
+/* .char, */
+.hide {
+  visibility: hidden;
+}
 
 a {
   width: 100%;
