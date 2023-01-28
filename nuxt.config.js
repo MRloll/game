@@ -2,6 +2,9 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   target: 'static',
   ssr: false,
+  router: {
+    base: '/live-game/'
+  },
   head: {
     titleTemplate: '%s',
     title: 'Game',
@@ -46,4 +49,5 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+  generate: { fallback: true }
 }
