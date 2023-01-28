@@ -101,6 +101,11 @@ export default {
       compareSix: 0,
     }
   },
+  head() {
+    return {
+      title: 'Level Three',
+    }
+  },
   computed: {
     character() {
       return this.$store.getters.character

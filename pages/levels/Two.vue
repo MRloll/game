@@ -37,6 +37,11 @@ export default {
       points: [],
     }
   },
+  head() {
+    return {
+      title: 'Level Two',
+    }
+  },
   computed: {
     character() {
       return this.$store.getters.character

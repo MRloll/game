@@ -1,5 +1,5 @@
 <template lang="pug">
-.result(v-if="result === 0 || result === 'loose'")
+.result(v-show="result === 0 || result === 'loose'")
   template(v-if="this.$route.fullPath === '/levels/four' && result === 0")
     img(src="~/assets/images/final-result.svg")
     img(class="final-result" src="~/assets/images/result-jenan.svg")
@@ -7,7 +7,7 @@
   template(v-else)
     img(src="~/assets/images/result.svg")
     h6 {{ result === 0 ? "!! رائع" : "خسرت!! جرب مرة اخري" }}
-    img(class="char-result" :src="resultImg.result" :class="[result === 0 ? 'light' : 'dark']")
+    img(class="char-result dark" :src="resultImg.result")
     div.buttons
       button(@click="refresh()")
         img(class="again" src="~/assets/images/again.svg")
@@ -46,6 +46,17 @@ export default {
     },
     resultImg() {
       return this.$store.getters.character
+    },
+  },
+  watch: {
+    result(newVal) {
+      if (newVal === 0) {
+        const result = document.querySelectorAll('.char-result')[0]
+        setTimeout(() => {
+          result.classList.remove('dark')
+          result.classList.add('light')
+        }, 2)
+      }
     },
   },
   methods: {
@@ -87,6 +98,9 @@ export default {
   }
   .final-result {
     bottom: 190px;
+  }
+  .char-result {
+    transition: all 3s ease;
   }
   .dark {
     filter: brightness(0);

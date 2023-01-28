@@ -49,6 +49,11 @@ export default {
       compareTwo: 0,
     }
   },
+  head() {
+    return {
+      title: 'Level Four',
+    }
+  },
   computed: {
     character() {
       return this.$store.getters.character
