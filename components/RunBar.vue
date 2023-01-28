@@ -28,7 +28,7 @@ export default {
         this.actions.push(data)
         const img = document.createElement('img')
         const picker = document.querySelector('span.picker')
-        img.setAttribute('src', `/_nuxt/assets/images/${data}.svg`)
+        img.setAttribute('src', require(`~/assets/images/${data}.svg`))
         picker.appendChild(img)
       }
     },
