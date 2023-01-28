@@ -96,8 +96,13 @@ export default {
       }
 
       for (let i = 0; i < this.actions.length; i++) {
-        if (this.actions[i] === this[superiority.pattern][i])
+        if (this.actions[i] === 'jump-up') {
+          this.jumpUp()
+        } else if (this.actions[i] === '2jump-up') {
+          this.twoJumpUp()
+        } else if (this.actions[i] === this[superiority.pattern][i]) {
           this.validate(this.actions[i])
+        }
       }
     },
     validate(action) {
@@ -136,7 +141,7 @@ export default {
     jumpUp() {
       tl.to('.char', {
         duration: 1,
-        bottom: '+=' + '58px',
+        bottom: '+=' + '65px',
         left: () => {
           return '+=' + (this.points[1] - this.points[0])
         },
@@ -155,7 +160,7 @@ export default {
             })
             gsap.to('.char', {
               duration: 1,
-              left: '+=' + (this.points[1] - this.points[0] + 40),
+              left: '+=' + (this.points[1] - this.points[0] + 60),
             })
             tl.pause()
             setTimeout(() => {
@@ -169,7 +174,7 @@ export default {
         },
         left: () => {
           if (this.numOfVisibles !== 1)
-            return '+=' + (this.points[1] - this.points[0])
+            return '+=' + (this.points[1] - this.points[0] - 40)
         },
         onComplete: () => this.hidePoints(),
       })
@@ -234,12 +239,9 @@ export default {
   position: absolute;
   bottom: 100px;
   left: 2px;
-  img {
-    height: 115px;
-  }
   &.down {
     transition: transform 1s ease;
-    transform: translate(5px, 45px);
+    transform: translate(-3px, 57px);
   }
 }
 .last-point {

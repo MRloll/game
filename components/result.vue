@@ -1,8 +1,8 @@
 <template lang="pug">
 .result(v-show="result === 0 || result === 'loose'")
-  template(v-if="this.$route.fullPath === '/levels/four' && result === 0")
+  template(v-if="this.$route.name === 'levels-Four' && result === 0")
     img(src="~/assets/images/final-result.svg")
-    img(class="final-result" src="~/assets/images/result-jenan.svg")
+    img(class="final-result char-result dark" src="~/assets/images/result-jenan.svg")
     nuxt-link(to="/" class="home")
   template(v-else)
     img(src="~/assets/images/result.svg")
@@ -34,11 +34,11 @@ export default {
   },
   computed: {
     nextLevel() {
-      if (this.$route.fullPath === '/levels/one') {
+      if (this.$route.name === 'levels-One') {
         return '/levels/two'
-      } else if (this.$route.fullPath === '/levels/two') {
+      } else if (this.$route.name === 'levels-Two') {
         return '/levels/three'
-      } else if (this.$route.fullPath === '/levels/three') {
+      } else if (this.$route.name === 'levels-Three') {
         return '/levels/four'
       } else {
         return '/levels/one'

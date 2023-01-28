@@ -5,8 +5,8 @@
     .pickables
       img(src="~/assets/images/step-forward.svg" @dragstart="drag($event)"  data-action="step-forward" draggable="true" id="1step")
       img(src="~/assets/images/2step-forward.svg" @dragstart="drag($event)"  data-action="2step-forward" draggable="true" id="2steps")
-      img(v-if="this.$route.fullPath !== '/levels/one'" src="~/assets/images/jump-up.svg" @dragstart="drag($event)"  data-action="jump-up" draggable="true" id="1jump")
-      img(v-if="this.$route.fullPath === '/levels/four'" src="~/assets/images/2jump-up.svg" @dragstart="drag($event)"  data-action="2jump-up" draggable="true" id="2jumps")
+      img(v-if="this.$route.name !== 'levels-One'" src="~/assets/images/jump-up.svg" @dragstart="drag($event)"  data-action="jump-up" draggable="true" id="1jump")
+      img(v-if="this.$route.name === 'levels-Four'" src="~/assets/images/2jump-up.svg" @dragstart="drag($event)"  data-action="2jump-up" draggable="true" id="2jumps")
 </template>
 
 <script>

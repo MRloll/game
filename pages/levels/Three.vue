@@ -156,8 +156,13 @@ export default {
       }
 
       for (let i = 0; i < this.actions.length; i++) {
-        if (this.actions[i] === this[superiority.pattern][i])
+        if (this.actions[i] === 'jump-up') {
+          this.jumpUp()
+        } else if (this.actions[i] === '2jump-up') {
+          this.twoJumpUp()
+        } else if (this.actions[i] === this[superiority.pattern][i]) {
           this.validate(this.actions[i])
+        }
       }
     },
     validate(action) {
@@ -273,9 +278,6 @@ export default {
   position: absolute;
   bottom: 100px;
   left: 2px;
-  img {
-    height: 115px;
-  }
 }
 .last-point {
   position: absolute;

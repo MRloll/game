@@ -140,9 +140,6 @@ export default {
   position: absolute;
   bottom: 100px;
   left: 2px;
-  img {
-    height: 115px;
-  }
 }
 
 .last-point {

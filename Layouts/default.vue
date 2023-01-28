@@ -37,6 +37,16 @@ export default {
   visibility: hidden;
 }
 
+.char {
+  width: 89px;
+  height: 115px;
+}
+
+.char img {
+  height: 100% !important;
+  width: 100% !important;
+}
+
 a {
   width: 100%;
 }
