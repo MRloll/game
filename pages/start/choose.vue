@@ -16,21 +16,25 @@ export default {
           src: require('~/assets/images/char-jenan.svg'),
           name: 'jenan',
           char: require('~/assets/images/jenan.svg'),
+          result: require('~/assets/images/result-jenan.svg'),
         },
         {
           src: require('~/assets/images/char-sky-guard.svg'),
           name: 'sky-guard',
           char: require('~/assets/images/sky-guard.svg'),
+          result: require('~/assets/images/result-sky-guard.svg'),
         },
         {
           src: require('~/assets/images/char-wingy.svg'),
           name: 'wingy',
           char: require('~/assets/images/wingy.svg'),
+          result: require('~/assets/images/result-wingy.svg'),
         },
         {
           src: require('~/assets/images/char-light.svg'),
           name: 'light',
           char: require('~/assets/images/light.svg'),
+          result: require('~/assets/images/result-light.svg'),
         },
       ],
     }

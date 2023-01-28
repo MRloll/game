@@ -1,9 +1,5 @@
 export const state = () => ({
-  character: {
-    src: require('~/assets/images/char-jenan.svg'),
-    name: 'jenan',
-    char: require('~/assets/images/jenan.svg'),
-  }
+  character: {}
 })
 
 export const getters = {
@@ -15,6 +11,7 @@ export const getters = {
 export const mutations = {
   SET_CHARACTER(state, payload) {
     state.character = payload
+    localStorage.setItem("char", JSON.stringify(payload))
   }
 }
 

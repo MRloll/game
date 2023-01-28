@@ -17,7 +17,6 @@ export default {
       actions: [],
     }
   },
-  created() {},
   methods: {
     allowDrop(ev) {
       ev.preventDefault()

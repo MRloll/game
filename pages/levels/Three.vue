@@ -3,10 +3,10 @@
   img(src="~/assets/images/level-three.svg")
   run-bar
   aside-steps
-  .win(v-show="numOfVisibles == 0 ") راءع لقد كسبت
-  .loose(v-show="numOfVisibles == 'loose' ") lost
+  result(:result="numOfVisibles")
   .char
     img(:src="character.char" :alt="character.name")
+  img(src="~/assets/images/last-point.svg" class="last-point")
   .points-wrapper
     img(src="~/assets/images/point.svg" class="point")
     img(src="~/assets/images/point.svg" class="point")
@@ -14,8 +14,8 @@
     img(src="~/assets/images/point.svg" class="point higher" )
     img(src="~/assets/images/point.svg" class="point higher")
     img(src="~/assets/images/point.svg" class="point higher")
-    img(src="~/assets/images/point.svg" class="point more-high ")
     img(src="~/assets/images/point.svg" class="point more-high jump-down")
+    img(src="~/assets/images/point.svg" class="point more-high")
     img(src="~/assets/images/point.svg" class="point more-high")
 
 </template>
@@ -25,6 +25,10 @@ import { gsap } from 'gsap'
 const tl = gsap.timeline()
 
 export default {
+  beforeRouteLeave(to, from, next) {
+    tl.kill()
+    next()
+  },
   data() {
     return {
       actions: [],
@@ -104,7 +108,6 @@ export default {
   },
   mounted() {
     const points = document.querySelectorAll('.points-wrapper img')
-
     for (let i = 0; i < points.length; i++) {
       this.points.push(points[i].offsetLeft)
     }
@@ -151,8 +154,6 @@ export default {
         if (this.actions[i] === this[superiority.pattern][i])
           this.validate(this.actions[i])
       }
-      console.log(superiority)
-      console.log(this[superiority.pattern])
     },
     validate(action) {
       if (action === '2step-forward') {
@@ -170,7 +171,11 @@ export default {
       tl.to('.char', {
         duration: 1,
         left: () => {
-          return '+=' + (this.points[1] - this.points[0])
+          if (this.numOfVisibles !== 2) {
+            return '+=' + (this.points[1] - this.points[0])
+          } else {
+            return '+=' + (this.points[1] - this.points[0] + 50)
+          }
         },
         onComplete: () => this.hidePoints(),
       })
@@ -189,7 +194,11 @@ export default {
         duration: 1,
         bottom: '+=' + '58px',
         left: () => {
-          return '+=' + (this.points[1] - this.points[0])
+          if (this.numOfVisibles !== 2) {
+            return '+=' + (this.points[1] - this.points[0])
+          } else {
+            return '+=' + (this.points[1] - this.points[0] + 50)
+          }
         },
         onComplete: () => this.hidePoints(),
       })
@@ -206,8 +215,20 @@ export default {
           points[point].getBoundingClientRect().left <= char.right &&
           char.bottom < points[point].getBoundingClientRect().bottom + 100
         ) {
-          if (points[point].classList.contains('jump-down')) {
-            gsap.to('.char', { bottom: '-=' + '50px', duration: 1 })
+          const jumpdown = document.querySelector(
+            '.points-wrapper img.jump-down'
+          )
+
+          if (
+            points[point].classList.contains('jump-down') &&
+            getComputedStyle(jumpdown).visibility !== 'hidden'
+          ) {
+            setTimeout(() => {
+              gsap.to('.char', {
+                y: '-=' + '-48px',
+                duration: 1,
+              })
+            }, 1000)
           }
           points[point].classList.add('hide')
         }
@@ -251,13 +272,11 @@ export default {
     height: 115px;
   }
 }
-.win,
-.loose {
+.last-point {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #aba0a0;
-  z-index: 1;
+  bottom: 63px;
+  width: 35px;
+  right: 15px;
 }
 
 .points-wrapper {

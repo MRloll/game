@@ -3,10 +3,10 @@
   img(src="~/assets/images/level-two.svg")
   run-bar
   aside-steps
-  .win(v-show="numOfVisibles == 0 ") راءع لقد كسبت
-  .loose(v-show="numOfVisibles == 'loose' ") lost
+  result(:result="numOfVisibles")
   .char
     img(:src="character.char" :alt="character.name")
+  img(src="~/assets/images/last-point.svg" class="last-point")
   .points-wrapper
     img(src="~/assets/images/point.svg" class="point" ref="p")
     img(src="~/assets/images/point.svg" class="point")
@@ -25,6 +25,11 @@ import { gsap } from 'gsap'
 const tl = gsap.timeline()
 
 export default {
+  beforeRouteLeave(to, from, next) {
+    tl.kill()
+    next()
+  },
+
   data() {
     return {
       actions: [],
@@ -120,10 +125,17 @@ export default {
       const char = document.querySelector('.char').getBoundingClientRect()
       for (let point = 0; point < points.length; point++) {
         if (
-          points[point].getBoundingClientRect().left <= char.left + 20 &&
+          points[point].getBoundingClientRect().left <= char.right &&
           char.bottom < points[point].getBoundingClientRect().bottom + 100
         ) {
-          if (points[point].classList.contains('jump-down')) {
+          const jumpdown = document.querySelector(
+            '.points-wrapper img.jump-down'
+          )
+
+          if (
+            points[point].classList.contains('jump-down') &&
+            getComputedStyle(jumpdown).visibility !== 'hidden'
+          ) {
             gsap.to('.char', { bottom: 100, duration: 1 })
           }
           points[point].classList.add('hide')
@@ -147,13 +159,13 @@ export default {
         this.points = newPoints
       }
 
-      // tl.to('.char', {
-      //   onComplete: () => {
-      //     if (this.numOfVisibles !== 0) {
-      //       this.numOfVisibles = 'loose'
-      //     }
-      //   },
-      // })
+      tl.to('.char', {
+        onComplete: () => {
+          if (this.numOfVisibles !== 0) {
+            this.numOfVisibles = 'loose'
+          }
+        },
+      })
     },
   },
 }
@@ -168,19 +180,18 @@ export default {
     height: 115px;
   }
 }
-.win,
-.loose {
+
+.last-point {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #aba0a0;
-  z-index: 1;
+  bottom: 53px;
+  width: 36px;
+  right: 7px;
 }
 
 .points-wrapper {
   position: absolute;
   left: 0px;
-  padding-left: 64px;
+  padding-left: 93px;
   width: 95%;
   bottom: 100px;
   display: flex;
@@ -189,31 +200,31 @@ export default {
     position: relative;
   }
   img:nth-child(1) {
-    left: 21px;
+    left: 1px;
   }
   img:nth-child(2) {
-    left: 32px;
+    left: 2px;
   }
   img:nth-child(3) {
-    left: 36px;
+    left: 6px;
   }
   img:nth-child(4) {
-    left: 16px;
+    left: -16px;
   }
   img:nth-child(5) {
-    left: -6px;
+    left: -36px;
   }
   img:nth-child(6) {
-    left: -23px;
+    left: -53px;
   }
   img:nth-child(7) {
-    left: -19px;
+    left: -49px;
   }
   img:nth-child(8) {
-    left: -12px;
+    left: -42px;
   }
   img:nth-child(9) {
-    left: -11px;
+    left: -41px;
   }
 
   .higher {

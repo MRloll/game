@@ -3,13 +3,12 @@
   img(src="~/assets/images/level-one.svg")
   run-bar
   aside-steps
-  .win(v-show="numOfVisibles == 0 ") راءع لقد كسبت
-    nuxt-link(to="/levels/two") two
-  .loose(v-show="numOfVisibles == 'loose' ") lost
+  result(:result="numOfVisibles")
   .char
     img(:src="character.char" :alt="character.name")
+  img(src="~/assets/images/last-point.svg" class="last-point")
   .points-wrapper
-    img(src="~/assets/images/point.svg" class="point" ref="p")
+    img(src="~/assets/images/point.svg" class="point")
     img(src="~/assets/images/point.svg" class="point")
     img(src="~/assets/images/point.svg" class="point higher" )
     img(src="~/assets/images/point.svg" class="point higher")
@@ -18,6 +17,7 @@
     img(src="~/assets/images/point.svg" class="point")
     img(src="~/assets/images/point.svg" class="point")
 
+
 </template>
 
 <script>
@@ -25,11 +25,15 @@ import { gsap } from 'gsap'
 const tl = gsap.timeline()
 
 export default {
+  beforeRouteLeave(to, from, next) {
+    tl.kill()
+    next()
+  },
   data() {
     return {
       actions: [],
-      visiblePoints: [],
       numOfVisibles: 8,
+      points: [],
     }
   },
   computed: {
@@ -39,11 +43,8 @@ export default {
   },
   mounted() {
     const points = document.querySelectorAll('.points-wrapper img')
-    for (const point of points) {
-      this.visiblePoints.push({
-        left: point.offsetLeft,
-        bottom: point.offsetBottom,
-      })
+    for (let i = 0; i < points.length; i++) {
+      this.points.push(points[i].offsetLeft)
     }
   },
   created() {
@@ -72,14 +73,18 @@ export default {
     stepForward() {
       tl.to('.char', {
         duration: 1,
-        left: '+=' + this.visiblePoints[0].left,
+        left: () => {
+          return '+=' + (this.points[1] - this.points[0])
+        },
         onComplete: () => this.hidePoints(),
       })
     },
     twoStepsForward() {
       tl.to('.char', {
         duration: 1,
-        left: '+=' + this.visiblePoints[1].left,
+        left: () => {
+          return '+=' + (this.points[2] - this.points[0])
+        },
         onComplete: () => this.hidePoints(),
       })
     },
@@ -91,10 +96,7 @@ export default {
       const points = document.querySelectorAll('.points-wrapper img')
       const char = document.querySelector('.char').getBoundingClientRect()
       for (let point = 0; point < points.length; point++) {
-        if (points[point].getBoundingClientRect().left <= char.left + 20) {
-          if (points[point].classList.contains('jump-down')) {
-            gsap.to('.char', { bottom: 100, duration: 1 })
-          }
+        if (points[point].getBoundingClientRect().left <= char.right) {
           points[point].classList.add('hide')
         }
       }
@@ -107,6 +109,15 @@ export default {
           this.numOfVisibles = 0
         }
       }
+
+      if (this.points.length > 4) {
+        const newPoints = this.points.filter((pos) => {
+          return pos > document.querySelector('.char').offsetLeft
+        })
+
+        this.points = newPoints
+      }
+
       tl.to('.char', {
         onComplete: () => {
           if (this.numOfVisibles !== 0) {
@@ -128,22 +139,44 @@ export default {
     height: 115px;
   }
 }
-.win,
-.loose {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #aba0a0;
-  z-index: 1;
-}
 
+.last-point {
+  position: absolute;
+  bottom: 63px;
+  width: 35px;
+  right: 15px;
+}
 .points-wrapper {
   position: absolute;
   left: 0px;
-  padding-left: 64px;
+  padding-left: 93px;
   width: 95%;
   bottom: 100px;
   display: flex;
   justify-content: space-around;
+  img {
+    position: relative;
+  }
+  img:nth-child(2) {
+    left: -6px;
+  }
+  img:nth-child(3) {
+    left: -12px;
+  }
+  img:nth-child(4) {
+    left: -20px;
+  }
+  img:nth-child(5) {
+    left: -24px;
+  }
+  img:nth-child(6) {
+    left: -29px;
+  }
+  img:nth-child(7) {
+    left: -37px;
+  }
+  img:nth-child(8) {
+    left: -41px;
+  }
 }
 </style>

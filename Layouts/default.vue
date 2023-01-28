@@ -6,12 +6,18 @@ div.wrapper
 <script>
 export default {
   name: 'DefaultLayout',
+  mounted() {
+    const char = JSON.parse(localStorage.getItem('char'))
+    if (char) {
+      this.$store.dispatch('setCharacter', char)
+    }
+  },
 }
 </script>
 
 <style>
 .wrapper {
-  height: 100vh;
+  height: 97vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,9 +30,9 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  /* overflow: clip; */
+  overflow: clip;
 }
-/* .char, */
+.char,
 .hide {
   visibility: hidden;
 }

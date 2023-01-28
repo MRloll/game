@@ -3,10 +3,10 @@
   img(src="~/assets/images/level-four.svg")
   run-bar
   aside-steps
-  .win(v-show="numOfVisibles == 0 ") راءع لقد كسبت
-  .loose(v-show="numOfVisibles == 'loose' ") lost
+  result(:result="numOfVisibles")
   .char
     img(:src="character.char" :alt="character.name")
+  img(src="~/assets/images/last-point.svg" class="last-point")
   .points-wrapper
     img(src="~/assets/images/point.svg" class="point")
     img(src="~/assets/images/point.svg" class="point")
@@ -32,19 +32,21 @@ export default {
         'step-forward',
         'step-forward',
         'jump-up',
+        'jump-up',
         'step-forward',
-        'step-forward',
-        'step-forward',
+        '2jump-up',
+        '2jump-up',
+      ],
+      patternTwo: [
+        '2step-forward',
         'jump-up',
         'jump-up',
         'step-forward',
+        '2jump-up',
+        '2jump-up',
       ],
       compareOne: 0,
       compareTwo: 0,
-      compareThree: 0,
-      compareFour: 0,
-      compareFive: 0,
-      compareSix: 0,
     }
   },
   computed: {
@@ -69,39 +71,29 @@ export default {
     // ======  steps to win
     // ------------------
     moves() {
-      // for (let i = 0; i < this.actions.length; i++) {
-      //   if (this.actions[i] === this.patternOne[i]) this.compareOne++
-      //   if (this.actions[i] === this.patternTwo[i]) this.compareTwo++
-      //   if (this.actions[i] === this.patternThree[i]) this.compareThree++
-      //   if (this.actions[i] === this.patternFour[i]) this.compareFour++
-      //   if (this.actions[i] === this.patternFive[i]) this.compareFive++
-      //   if (this.actions[i] === this.patternSix[i]) this.compareSix++
-      // }
+      for (let i = 0; i < this.actions.length; i++) {
+        if (this.actions[i] === this.patternOne[i]) this.compareOne++
+        if (this.actions[i] === this.patternTwo[i]) this.compareTwo++
+      }
 
-      // const compares = [
-      //   { value: this.compareOne, pattern: 'patternOne' },
-      //   { value: this.compareTwo, pattern: 'patternTwo' },
-      //   { value: this.compareThree, pattern: 'patternThree' },
-      //   { value: this.compareFour, pattern: 'patternFour' },
-      //   { value: this.compareFive, pattern: 'patternFive' },
-      //   { value: this.compareSix, pattern: 'patternSix' },
-      // ]
+      const compares = [
+        { value: this.compareOne, pattern: 'patternOne' },
+        { value: this.compareTwo, pattern: 'patternTwo' },
+      ]
 
-      // let i = 0
-      // let superiority = {}
-      // for (const f of compares) {
-      //   if (f.value > i) {
-      //     i = f.value
-      //     superiority = { value: f.value, pattern: f.pattern }
-      //   }
-      // }
+      let i = 0
+      let superiority = {}
+      for (const f of compares) {
+        if (f.value > i) {
+          i = f.value
+          superiority = { value: f.value, pattern: f.pattern }
+        }
+      }
 
       for (let i = 0; i < this.actions.length; i++) {
-        // if (this.actions[i] === this[superiority.pattern][i])
-        this.validate(this.actions[i])
+        if (this.actions[i] === this[superiority.pattern][i])
+          this.validate(this.actions[i])
       }
-      // console.log(superiority)
-      // console.log(this[superiority.pattern])
     },
     validate(action) {
       if (action === '2step-forward') {
@@ -160,14 +152,14 @@ export default {
               duration: 1,
               left: '+=' + (this.points[1] - this.points[0] + 40),
             })
-
-            tl.to(
-              '.char',
-              {
+            tl.pause()
+            setTimeout(() => {
+              gsap.to('.char', {
                 top: '+=' + '50px',
-              },
-              '<.4'
-            )
+                duration: 1,
+              })
+              tl.play()
+            }, 1000)
           }
         },
         left: () => {
@@ -220,13 +212,13 @@ export default {
         this.points = newPoints
       }
 
-      // tl.to('.char', {
-      //   onComplete: () => {
-      //     if (this.numOfVisibles !== 0) {
-      //       this.numOfVisibles = 'loose'
-      //     }
-      //   },
-      // })
+      tl.to('.char', {
+        onComplete: () => {
+          if (this.numOfVisibles !== 0) {
+            this.numOfVisibles = 'loose'
+          }
+        },
+      })
     },
   },
 }
@@ -245,13 +237,11 @@ export default {
     transform: translate(5px, 45px);
   }
 }
-.win,
-.loose {
+.last-point {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #aba0a0;
-  z-index: 1;
+  bottom: 63px;
+  width: 35px;
+  right: 15px;
 }
 
 .points-wrapper {
