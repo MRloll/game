@@ -3,7 +3,7 @@
   template(v-if="this.$route.name === 'levels-Four' && result === 0")
     img(src="~/assets/images/final-result.svg")
     img(class="final-result char-result dark" src="~/assets/images/result-jenan.svg")
-    a(href="/" class="home")
+    a(href="/live-game/" class="home")
   template(v-else)
     img(src="~/assets/images/result.svg")
     h6 {{ result === 0 ? "!! رائع" : "خسرت!! جرب مرة اخري" }}
@@ -35,13 +35,13 @@ export default {
   computed: {
     nextLevel() {
       if (this.$route.name === 'levels-One') {
-        return '/levels/two'
+        return '/live-game/levels/two'
       } else if (this.$route.name === 'levels-Two') {
-        return '/levels/three'
+        return '/live-game//levels/three'
       } else if (this.$route.name === 'levels-Three') {
-        return '/levels/four'
+        return '/live-game//levels/four'
       } else {
-        return '/levels/one'
+        return '/live-game//levels/one'
       }
     },
     resultImg() {
