@@ -37,11 +37,11 @@ export default {
       if (this.$route.name === 'levels-One') {
         return '/live-game/levels/two'
       } else if (this.$route.name === 'levels-Two') {
-        return '/live-game//levels/three'
+        return '/live-game/levels/three'
       } else if (this.$route.name === 'levels-Three') {
-        return '/live-game//levels/four'
+        return '/live-game/levels/four'
       } else {
-        return '/live-game//levels/one'
+        return '/live-game/levels/one'
       }
     },
     resultImg() {
