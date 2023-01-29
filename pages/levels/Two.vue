@@ -79,14 +79,14 @@ export default {
           this.jumpUp()
         }
       } else {
-        for (const action of this.actions) {
-          if (action === 'step-forward') {
+        for (let i = 0; i < this.actions.length; i++) {
+          if (this.actions[i] === 'step-forward') {
             this.stepForward()
           }
-          if (action === '2step-forward') {
+          if (this.actions[i] === '2step-forward') {
             this.twoStepsForward()
           }
-          if (action === 'jump-up') {
+          if (this.actions[i] === 'jump-up') {
             this.jumpUp()
           }
         }

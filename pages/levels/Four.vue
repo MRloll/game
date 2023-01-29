@@ -23,6 +23,10 @@ import { gsap } from 'gsap'
 const tl = gsap.timeline()
 
 export default {
+  beforeRouteLeave(to, from, next) {
+    tl.kill()
+    next()
+  },
   data() {
     return {
       actions: [],
@@ -96,10 +100,12 @@ export default {
       }
 
       for (let i = 0; i < this.actions.length; i++) {
-        if (this.actions[i] === 'jump-up') {
+        if (this.actions[0] === 'jump-up') {
           this.jumpUp()
-        } else if (this.actions[i] === '2jump-up') {
+          break
+        } else if (this.actions[0] === '2jump-up') {
           this.twoJumpUp()
+          break
         } else if (this.actions[i] === this[superiority.pattern][i]) {
           this.validate(this.actions[i])
         }

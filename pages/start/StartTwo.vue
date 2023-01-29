@@ -5,7 +5,16 @@
     img(src="~/assets/images/start-two-image.svg")
 
 </template>
-
+<script>
+import { gsap } from 'gsap'
+const tl = gsap.timeline()
+export default {
+  beforeRouteLeave(to, from, next) {
+    tl.kill()
+    next()
+  },
+}
+</script>
 <style scoped>
 .start-two-image {
   position: absolute;

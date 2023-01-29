@@ -8,7 +8,14 @@
 </template>
 
 <script>
+import { gsap } from 'gsap'
+const tl = gsap.timeline()
+
 export default {
+  beforeRouteLeave(to, from, next) {
+    tl.kill()
+    next()
+  },
   data() {
     return {
       characters: [

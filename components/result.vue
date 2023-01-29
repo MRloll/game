@@ -3,7 +3,7 @@
   template(v-if="this.$route.name === 'levels-Four' && result === 0")
     img(src="~/assets/images/final-result.svg")
     img(class="final-result char-result dark" src="~/assets/images/result-jenan.svg")
-    nuxt-link(to="/" class="home")
+    a(href="/" class="home")
   template(v-else)
     img(src="~/assets/images/result.svg")
     h6 {{ result === 0 ? "!! رائع" : "خسرت!! جرب مرة اخري" }}
@@ -11,7 +11,7 @@
     div.buttons
       button(@click="refresh()")
         img(class="again" src="~/assets/images/again.svg")
-      nuxt-link(:to="nextLevel" v-if="result === 0")
+      a(:href="nextLevel" v-if="result === 0")
         img(class="next-level" src="~/assets/images/next-level.svg")
 
 </template>
