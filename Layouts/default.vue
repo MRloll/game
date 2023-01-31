@@ -15,7 +15,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .wrapper {
   height: 97vh;
   display: flex;
@@ -32,7 +32,6 @@ export default {
   position: relative;
   overflow: clip;
 }
-.char,
 .hide {
   visibility: hidden;
 }

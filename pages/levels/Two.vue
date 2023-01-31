@@ -6,7 +6,8 @@
   result(:result="numOfVisibles")
   .char
     img(:src="character.char" :alt="character.name")
-  img(src="~/assets/images/last-point.svg" class="last-point")
+  a(href="/live-game/")
+    img(src="~/assets/images/last-point.svg" class="last-point")
   .points-wrapper
     img(src="~/assets/images/point.svg" class="point" ref="p")
     img(src="~/assets/images/point.svg" class="point")
