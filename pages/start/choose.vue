@@ -2,7 +2,7 @@
 .container
   img(src="~/assets/images/start-two.svg")
   .char-wrapper()
-    nuxt-link(to="/levels/one" v-for="char in characters" :key="char.name")
+    a(href="/live-game/levels/one" v-for="char in characters" :key="char.name")
       img(:src="char.src" :alt="char.name" @click="setCharacter(char)")
 
 </template>
@@ -24,24 +24,32 @@ export default {
           name: 'jenan',
           char: require('~/assets/images/jenan.svg'),
           result: require('~/assets/images/result-jenan.svg'),
+          left: require('~/assets/images/jenan-left.svg'),
+          right: require('~/assets/images/jenan-right.svg'),
         },
         {
           src: require('~/assets/images/char-sky-guard.svg'),
           name: 'sky-guard',
           char: require('~/assets/images/sky-guard.svg'),
           result: require('~/assets/images/result-sky-guard.svg'),
+          left: require('~/assets/images/sky-guard-left.svg'),
+          right: require('~/assets/images/sky-guard-right.svg'),
         },
         {
           src: require('~/assets/images/char-wingy.svg'),
           name: 'wingy',
           char: require('~/assets/images/wingy.svg'),
           result: require('~/assets/images/result-wingy.svg'),
+          left: require('~/assets/images/wingy-left.svg'),
+          right: require('~/assets/images/wingy-right.svg'),
         },
         {
           src: require('~/assets/images/char-light.svg'),
           name: 'light',
           char: require('~/assets/images/light.svg'),
           result: require('~/assets/images/result-light.svg'),
+          left: require('~/assets/images/light-left.svg'),
+          right: require('~/assets/images/light-right.svg'),
         },
       ],
     }

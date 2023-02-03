@@ -17,6 +17,7 @@ export default {
       actions: [],
     }
   },
+  mounted() {},
   methods: {
     allowDrop(ev) {
       ev.preventDefault()
@@ -42,11 +43,22 @@ export default {
         tl.to('.aside-wrapper', {
           x: '-100%',
           duration: 0.3,
+          onComplete: () => {
+            this.$nuxt.$emit('actions', this.actions)
+          },
         })
-        tl.to('.char', {
-          visibility: 'visible',
-          onComplete: () => this.$nuxt.$emit('actions', this.actions),
-        })
+        const moves = document.querySelectorAll('.char .moves')
+
+        setInterval(() => {
+          if (getComputedStyle(moves[0]).display === 'none') {
+            moves[0].style.display = 'block'
+            moves[1].style.display = 'none'
+          } else {
+            moves[0].style.display = 'none'
+            moves[1].style.display = 'block'
+          }
+        }, 100)
+        document.querySelector('.char .static').style.display = 'none'
       }
     },
   },

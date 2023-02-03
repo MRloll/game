@@ -39,11 +39,23 @@ export default {
 .char {
   width: 89px;
   height: 115px;
+  position: absolute;
+  bottom: 100px;
+  left: 2px;
 }
 
 .char img {
   height: 100% !important;
   width: 100% !important;
+}
+
+.char .moves {
+  display: none;
+  position: absolute;
+}
+
+.char .static {
+  position: absolute;
 }
 
 a {

@@ -27,6 +27,7 @@ export default {
   height: 100%;
   width: 150px;
   background-color: rgba($color: #000000, $alpha: 0.2);
+  z-index: 1;
   .pickables {
     img {
       display: block;

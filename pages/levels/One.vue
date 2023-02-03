@@ -5,7 +5,9 @@
   aside-steps
   result(:result="numOfVisibles")
   .char
-    img(:src="character.char" :alt="character.name")
+    img(class="static" :src="character.char" :alt="character.name")
+    img(class="moves left" :src="character.left" :alt="character.name")
+    img(class="moves right" :src="character.right" :alt="character.name")
   a(href="/live-game/")
     img(src="~/assets/images/last-point.svg" class="last-point")
   .points-wrapper
