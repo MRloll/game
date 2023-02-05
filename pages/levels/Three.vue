@@ -115,6 +115,7 @@ export default {
     },
   },
   mounted() {
+    this.interval()
     const points = document.querySelectorAll('.points-wrapper img')
     for (let i = 0; i < points.length; i++) {
       this.points.push(points[i].offsetLeft)
@@ -222,6 +223,18 @@ export default {
     // ------------------
     // ======  how to hide points
     // --------------
+
+    interval() {
+      setInterval(function () {
+        const points = document.querySelectorAll('.points-wrapper img')
+        const char = document.querySelector('.char').getBoundingClientRect()
+        for (let point = 0; point < points.length; point++) {
+          if (points[point].getBoundingClientRect().left <= char.right - 30) {
+            points[point].classList.add('hide')
+          }
+        }
+      }, 300)
+    },
     hidePoints() {
       const points = document.querySelectorAll('.points-wrapper img')
       const char = document.querySelector('.char').getBoundingClientRect()
@@ -230,22 +243,11 @@ export default {
           points[point].getBoundingClientRect().left <= char.right &&
           char.bottom < points[point].getBoundingClientRect().bottom + 100
         ) {
-          const jumpdown = document.querySelector(
-            '.points-wrapper img.jump-down'
-          )
-
-          if (
-            points[point].classList.contains('jump-down') &&
-            getComputedStyle(jumpdown).visibility !== 'hidden'
-          ) {
+          if (points[point].classList.contains('jump-down')) {
             setTimeout(() => {
-              gsap.to('.char', {
-                y: '-=' + '-48px',
-                duration: 1,
-              })
+              document.querySelector('.char').classList.add('down')
             }, 1000)
           }
-          points[point].classList.add('hide')
         }
       }
       let a = 0
@@ -283,6 +285,10 @@ export default {
   position: absolute;
   bottom: 100px;
   left: 2px;
+  &.down {
+    transition: transform 1s ease;
+    transform: translate(-3px, 42px);
+  }
 }
 .last-point {
   position: absolute;

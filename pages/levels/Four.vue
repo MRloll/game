@@ -67,6 +67,7 @@ export default {
     },
   },
   mounted() {
+    this.interval()
     const points = document.querySelectorAll('.points-wrapper img')
     for (let i = 0; i < points.length; i++) {
       this.points.push(points[i].offsetLeft)
@@ -169,7 +170,7 @@ export default {
             })
             gsap.to('.char', {
               duration: 1,
-              left: '+=' + (this.points[1] - this.points[0] + 60),
+              left: '+=' + (this.points[1] - this.points[0] + 90),
             })
             tl.pause()
             setTimeout(() => {
@@ -192,6 +193,17 @@ export default {
     // ------------------
     // ======  how to hide points
     // --------------
+    interval() {
+      setInterval(function () {
+        const points = document.querySelectorAll('.points-wrapper img')
+        const char = document.querySelector('.char').getBoundingClientRect()
+        for (let point = 0; point < points.length; point++) {
+          if (points[point].getBoundingClientRect().left <= char.right - 30) {
+            points[point].classList.add('hide')
+          }
+        }
+      }, 300)
+    },
     hidePoints() {
       const points = document.querySelectorAll('.points-wrapper img')
       const char = document.querySelector('.char').getBoundingClientRect()
@@ -200,17 +212,9 @@ export default {
           points[point].getBoundingClientRect().left <= char.right &&
           char.bottom < points[point].getBoundingClientRect().bottom + 100
         ) {
-          const jumpdown = document.querySelector(
-            '.points-wrapper img.jump-down'
-          )
-
-          if (
-            points[point].classList.contains('jump-down') &&
-            getComputedStyle(jumpdown).visibility !== 'hidden'
-          ) {
+          if (points[point].classList.contains('jump-down')) {
             document.querySelector('.char').classList.add('down')
           }
-          points[point].classList.add('hide')
         }
       }
       let a = 0

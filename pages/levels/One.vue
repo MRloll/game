@@ -50,6 +50,7 @@ export default {
     },
   },
   mounted() {
+    this.interval()
     const points = document.querySelectorAll('.points-wrapper img')
     for (let i = 0; i < points.length; i++) {
       this.points.push(points[i].offsetLeft)
@@ -100,14 +101,19 @@ export default {
     // ------------------
     // ======  how to hide points
     // --------------
+    interval() {
+      setInterval(function () {
+        const points = document.querySelectorAll('.points-wrapper img')
+        const char = document.querySelector('.char').getBoundingClientRect()
+        for (let point = 0; point < points.length; point++) {
+          if (points[point].getBoundingClientRect().left <= char.right - 10) {
+            points[point].classList.add('hide')
+          }
+        }
+      }, 300)
+    },
     hidePoints() {
       const points = document.querySelectorAll('.points-wrapper img')
-      const char = document.querySelector('.char').getBoundingClientRect()
-      for (let point = 0; point < points.length; point++) {
-        if (points[point].getBoundingClientRect().left <= char.right) {
-          points[point].classList.add('hide')
-        }
-      }
       let a = 0
       for (let point = 0; point < points.length; point++) {
         if (getComputedStyle(points[point]).visibility === 'visible') {
