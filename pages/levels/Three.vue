@@ -302,7 +302,7 @@ export default {
   left: 0px;
   padding-left: 93px;
   width: 95%;
-  bottom: 100px;
+  bottom: 106px;
   display: flex;
   justify-content: space-around;
   img:nth-child(4) {
@@ -325,11 +325,11 @@ export default {
   }
   .higher {
     position: relative;
-    top: -58px;
+    top: -62px;
   }
   .more-high {
     position: relative;
-    top: -130px;
+    top: -135px;
   }
   img.hide {
     visibility: hidden;

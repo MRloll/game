@@ -202,7 +202,7 @@ export default {
   left: 0px;
   padding-left: 93px;
   width: 95%;
-  bottom: 100px;
+  bottom: 107px;
   display: flex;
   justify-content: space-around;
   img {
@@ -238,7 +238,7 @@ export default {
 
   .higher {
     position: relative;
-    top: -58px;
+    top: -53px;
   }
   img.hide {
     visibility: hidden;
